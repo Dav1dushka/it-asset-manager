@@ -15,6 +15,8 @@ A simple web application for managing IT assets and devices.
 - Store data in Local Storage
 - Track IP addresses
 - Track device status
+- IP address validation
+- Device counter
 
 ## Technologies
 
