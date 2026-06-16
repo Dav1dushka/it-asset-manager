@@ -4,7 +4,8 @@ A simple web application for managing IT assets and devices.
 
 
 ##Screenshot
-<img width="1117" height="601" alt="image" src="https://github.com/user-attachments/assets/be783b80-c765-4ccf-9da8-d2995b55be6f" />
+<img width="1283" height="630" alt="image" src="https://github.com/user-attachments/assets/13a489cb-a63a-43f8-9077-fcb7253d601d" />
+
 
 ## Features
 
