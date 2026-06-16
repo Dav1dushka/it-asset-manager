@@ -3,7 +3,7 @@
 A simple web application for managing IT assets and devices.
 
 
-##Screenshot
+## Screenshot
 <img width="1283" height="630" alt="image" src="https://github.com/user-attachments/assets/13a489cb-a63a-43f8-9077-fcb7253d601d" />
 
 
