@@ -1,14 +1,12 @@
 const form = document.getElementById("assetForm");
 const table = document.getElementById("assetTable");
 const search = document.getElementById("search");
+const deviceCounter = document.getElementById("deviceCounter");
 
 let devices = JSON.parse(localStorage.getItem("devices")) || [];
 
-const deviceCounter = document.getElementById("deviceCounter");
-
 function updateCounter() {
-    deviceCounter.textContent =
-        `Total Devices: ${devices.length}`;
+    deviceCounter.textContent = `Total Devices: ${devices.length}`;
 }
 
 function saveDevices() {
@@ -24,7 +22,6 @@ function renderDevices(data = devices) {
 
     data.forEach((device, index) => {
 
-        updateCounter();
         table.innerHTML += `
             <tr>
                 <td>${device.device}</td>
@@ -42,25 +39,28 @@ function renderDevices(data = devices) {
             </tr>
         `;
     });
+
+    updateCounter();
 }
 
 form.addEventListener("submit", (e) => {
 
     e.preventDefault();
-    
-const ip = document.getElementById("ipAddress").value;
 
-const ipRegex = /^(25[0-5]|2[0-4][0-9]|1?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|1?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|1?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|1?[0-9][0-9]?)$/;
+    const ip = document.getElementById("ipAddress").value;
 
-if (!ipRegex.test(ip)) {
-    alert("Please enter a valid IP address.");
-    return;
-}
-    
+    const ipRegex =
+        /^(25[0-5]|2[0-4][0-9]|1?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|1?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|1?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|1?[0-9][0-9]?)$/;
+
+    if (!ipRegex.test(ip)) {
+        alert("Please enter a valid IP address.");
+        return;
+    }
+
     const newDevice = {
         device: document.getElementById("deviceName").value,
         user: document.getElementById("userName").value,
-        ip: document.getElementById("ipAddress").value,
+        ip: ip,
         status: document.getElementById("status").value
     };
 
