@@ -4,6 +4,13 @@ const search = document.getElementById("search");
 
 let devices = JSON.parse(localStorage.getItem("devices")) || [];
 
+const deviceCounter = document.getElementById("deviceCounter");
+
+function updateCounter() {
+    deviceCounter.textContent =
+        `Total Devices: ${devices.length}`;
+}
+
 function saveDevices() {
     localStorage.setItem(
         "devices",
