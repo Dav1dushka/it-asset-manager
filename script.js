@@ -47,7 +47,16 @@ function renderDevices(data = devices) {
 form.addEventListener("submit", (e) => {
 
     e.preventDefault();
+    
+const ip = document.getElementById("ipAddress").value;
 
+const ipRegex = /^(25[0-5]|2[0-4][0-9]|1?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|1?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|1?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|1?[0-9][0-9]?)$/;
+
+if (!ipRegex.test(ip)) {
+    alert("Please enter a valid IP address.");
+    return;
+}
+    
     const newDevice = {
         device: document.getElementById("deviceName").value,
         user: document.getElementById("userName").value,
