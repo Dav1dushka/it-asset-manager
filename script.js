@@ -24,6 +24,7 @@ function renderDevices(data = devices) {
 
     data.forEach((device, index) => {
 
+        updateCounter();
         table.innerHTML += `
             <tr>
                 <td>${device.device}</td>
