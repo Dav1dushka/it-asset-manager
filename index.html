@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Asset Manager</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>IT Asset Manager</h1>
+
+        <form id="assetForm">
+            <input type="text" id="deviceName" placeholder="Device Name" required>
+
+            <input type="text" id="userName" placeholder="Assigned User" required>
+
+            <input type="text" id="ipAddress" placeholder="IP Address" required>
+
+            <select id="status">
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+                <option value="Maintenance">Maintenance</option>
+            </select>
+
+            <button type="submit">
+                Add Device
+            </button>
+        </form>
+
+        <input
+            type="text"
+            id="search"
+            placeholder="Search device..."
+        >
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Device</th>
+                    <th>User</th>
+                    <th>IP</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="assetTable"></tbody>
+        </table>
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
