@@ -1,10 +1,10 @@
-<img width="1117" height="601" alt="image" src="https://github.com/user-attachments/assets/be783b80-c765-4ccf-9da8-d2995b55be6f" /># IT Asset Manager
+# IT Asset Manager
 
 A simple web application for managing IT assets and devices.
 
 
 ##Screenshot
-![App Screenshot](screenshot.png)
+<img width="1117" height="601" alt="image" src="https://github.com/user-attachments/assets/be783b80-c765-4ccf-9da8-d2995b55be6f" />
 
 ## Features
 
