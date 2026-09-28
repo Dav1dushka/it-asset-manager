@@ -1,60 +1,147 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A lightweight browser-based workspace for tracking IT devices and their assigned users.">
+    <meta name="theme-color" content="#f4f6fb">
     <title>IT Asset Manager</title>
- 
     <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
-
-    <div class="container">
-        <p id="deviceCounter">
-    Total Devices: 0
-</p>
-        <h1>IT Asset Manager</h1>
-
-        <form id="assetForm">
-            <input type="text" id="deviceName" placeholder="Device Name" required>
-
-            <input type="text" id="userName" placeholder="Assigned User" required>
-
-            <input type="text" id="ipAddress" placeholder="IP Address" required>
-
-            <select id="status">
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-                <option value="Maintenance">Maintenance</option>
-            </select>
-
-            <button type="submit">
-                Add Device
+    <main class="app-shell">
+        <header class="page-header">
+            <div>
+                <p class="eyebrow">INVENTORY WORKSPACE</p>
+                <h1>IT Asset Manager</h1>
+                <p class="page-subtitle">Keep track of devices, assigned users, and current status.</p>
+            </div>
+            <button id="exportButton" class="button button-secondary" type="button" disabled>
+                Export CSV
             </button>
-        </form>
+        </header>
 
-        <input
-            type="text"
-            id="search"
-            placeholder="Search device..."
-        >
+        <section class="summary-grid" aria-label="Inventory summary">
+            <article class="summary-card">
+                <span class="summary-label">Total devices</span>
+                <strong id="totalCount" class="summary-value">0</strong>
+            </article>
+            <article class="summary-card">
+                <span class="summary-label">Active</span>
+                <strong id="activeCount" class="summary-value">0</strong>
+            </article>
+            <article class="summary-card">
+                <span class="summary-label">In maintenance</span>
+                <strong id="maintenanceCount" class="summary-value">0</strong>
+            </article>
+            <article class="summary-card">
+                <span class="summary-label">Inactive</span>
+                <strong id="inactiveCount" class="summary-value">0</strong>
+            </article>
+        </section>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Device</th>
-                    <th>User</th>
-                    <th>IP</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
+        <div class="workspace">
+            <section class="panel form-panel" aria-labelledby="formHeading">
+                <div class="panel-heading">
+                    <div>
+                        <p class="eyebrow">DEVICE DETAILS</p>
+                        <h2 id="formHeading">Add a device</h2>
+                    </div>
+                </div>
 
-            <tbody id="assetTable"></tbody>
-        </table>
-    </div>
+                <form id="assetForm" novalidate>
+                    <div class="field">
+                        <label for="deviceName">Device name</label>
+                        <input id="deviceName" name="deviceName" type="text" maxlength="80" placeholder="e.g. MacBook Pro 14&#8243;" autocomplete="off" required>
+                    </div>
 
-    <script src="script.js"></script>
+                    <div class="field">
+                        <label for="userName">Assigned user</label>
+                        <input id="userName" name="userName" type="text" maxlength="80" placeholder="e.g. Elena Rossi" autocomplete="off" required>
+                    </div>
 
+                    <div class="field">
+                        <label for="ipAddress">IPv4 address</label>
+                        <input id="ipAddress" name="ipAddress" type="text" inputmode="decimal" maxlength="15" placeholder="192.168.1.24" autocomplete="off" aria-describedby="ipHint" required>
+                        <small id="ipHint">Enter an address in dotted decimal format.</small>
+                    </div>
+
+                    <div class="field">
+                        <label for="status">Status</label>
+                        <select id="status" name="status">
+                            <option value="Active">Active</option>
+                            <option value="Maintenance">Maintenance</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+
+                    <p id="formMessage" class="form-message" role="status" aria-live="polite"></p>
+
+                    <div class="form-actions">
+                        <button id="submitButton" class="button button-primary" type="submit">Add device</button>
+                        <button id="cancelEditButton" class="button button-quiet" type="button" hidden>Cancel</button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="panel inventory-panel" aria-labelledby="inventoryHeading">
+                <div class="inventory-toolbar">
+                    <div class="panel-heading">
+                        <div>
+                            <p class="eyebrow">INVENTORY</p>
+                            <h2 id="inventoryHeading">Devices</h2>
+                        </div>
+                    </div>
+
+                    <div class="filters">
+                        <div class="search-field">
+                            <label class="visually-hidden" for="search">Search devices</label>
+                            <input id="search" type="search" placeholder="Search devices..." autocomplete="off">
+                        </div>
+                        <div class="filter-field">
+                            <label class="visually-hidden" for="statusFilter">Filter by status</label>
+                            <select id="statusFilter">
+                                <option value="All">All statuses</option>
+                                <option value="Active">Active</option>
+                                <option value="Maintenance">Maintenance</option>
+                                <option value="Inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <p id="resultsSummary" class="results-summary" aria-live="polite"></p>
+
+                <div class="table-wrap">
+                    <table id="deviceTable">
+                        <caption class="visually-hidden">Devices in the IT asset inventory</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Device</th>
+                                <th scope="col">Assigned user</th>
+                                <th scope="col">IPv4 address</th>
+                                <th scope="col">Status</th>
+                                <th scope="col"><span class="visually-hidden">Actions</span></th>
+                            </tr>
+                        </thead>
+                        <tbody id="assetTable"></tbody>
+                    </table>
+
+                    <div id="emptyState" class="empty-state" hidden>
+                        <div class="empty-icon" aria-hidden="true">▦</div>
+                        <h3 id="emptyTitle">Your inventory is empty</h3>
+                        <p id="emptyDescription">Add a device to get started, or load a few sample records to explore the app.</p>
+                        <button id="loadSampleButton" class="button button-secondary" type="button">Load sample devices</button>
+                        <button id="clearFiltersButton" class="button button-quiet" type="button" hidden>Clear filters</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <footer class="page-footer">
+            <p>Data is saved in this browser only. This demo does not connect to a server.</p>
+        </footer>
+    </main>
 </body>
 </html>
