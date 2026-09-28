@@ -10,44 +10,40 @@ function updateCounter() {
 }
 
 function saveDevices() {
-    localStorage.setItem(
-        "devices",
-        JSON.stringify(devices)
-    );
+    localStorage.setItem("devices", JSON.stringify(devices));
 }
 
 function renderDevices(data = devices) {
-
     table.innerHTML = "";
 
-    data.forEach((device, index) => {
+    data.forEach((device) => {
+        const row = document.createElement("tr");
 
-        table.innerHTML += `
-            <tr>
-                <td>${device.device}</td>
-                <td>${device.user}</td>
-                <td>${device.ip}</td>
-                <td>${device.status}</td>
+        [device.device, device.user, device.ip, device.status].forEach((value) => {
+            const cell = document.createElement("td");
+            cell.textContent = value;
+            row.appendChild(cell);
+        });
 
-                <td>
-                    <button
-                        class="delete-btn"
-                        onclick="deleteDevice(${index})">
-                        Delete
-                    </button>
-                </td>
-            </tr>
-        `;
+        const actionCell = document.createElement("td");
+        const deleteButton = document.createElement("button");
+
+        deleteButton.className = "delete-btn";
+        deleteButton.textContent = "Delete";
+        deleteButton.addEventListener("click", () => deleteDevice(device));
+
+        actionCell.appendChild(deleteButton);
+        row.appendChild(actionCell);
+        table.appendChild(row);
     });
 
     updateCounter();
 }
 
-form.addEventListener("submit", (e) => {
+form.addEventListener("submit", (event) => {
+    event.preventDefault();
 
-    e.preventDefault();
-
-    const ip = document.getElementById("ipAddress").value;
+    const ip = document.getElementById("ipAddress").value.trim();
 
     const ipRegex =
         /^(25[0-5]|2[0-4][0-9]|1?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|1?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|1?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|1?[0-9][0-9]?)$/;
@@ -58,36 +54,33 @@ form.addEventListener("submit", (e) => {
     }
 
     const newDevice = {
-        device: document.getElementById("deviceName").value,
-        user: document.getElementById("userName").value,
-        ip: ip,
+        id: crypto.randomUUID(),
+        device: document.getElementById("deviceName").value.trim(),
+        user: document.getElementById("userName").value.trim(),
+        ip,
         status: document.getElementById("status").value
     };
 
     devices.push(newDevice);
-
     saveDevices();
     renderDevices();
-
     form.reset();
 });
 
-function deleteDevice(index) {
-
-    devices.splice(index, 1);
-
+function deleteDevice(deviceToDelete) {
+    devices = devices.filter((device) => device !== deviceToDelete);
     saveDevices();
     renderDevices();
 }
 
 search.addEventListener("input", () => {
+    const value = search.value.toLowerCase().trim();
 
-    const value = search.value.toLowerCase();
-
-    const filtered = devices.filter(device =>
+    const filtered = devices.filter((device) =>
         device.device.toLowerCase().includes(value) ||
         device.user.toLowerCase().includes(value) ||
-        device.ip.toLowerCase().includes(value)
+        device.ip.toLowerCase().includes(value) ||
+        device.status.toLowerCase().includes(value)
     );
 
     renderDevices(filtered);
